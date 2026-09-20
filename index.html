@@ -7,7 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,500;1,600&family=Space+Grotesk:wght@400;500;600;700&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #08080a;
@@ -26,7 +26,6 @@
             --accent-soft: rgba(242, 201, 76, 0.18);
             --radius: 12px;
 
-            --font-display: 'Fraunces', 'Iowan Old Style', serif;
             --font-heading: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif;
             --font-body: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
@@ -119,24 +118,11 @@
         }
 
         .header h1 {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            font-family: var(--font-display);
-            font-style: italic;
-            font-weight: 600;
-            font-size: 2.6rem;
-            letter-spacing: -0.01em;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 3.4rem;
+            letter-spacing: -0.02em;
             line-height: 1;
-        }
-
-        .header h1 .mark {
-            width: 26px;
-            height: 26px;
-            border-radius: 7px;
-            background: linear-gradient(135deg, var(--accent-bright) 0%, var(--accent) 100%);
-            box-shadow: 0 6px 18px rgba(242, 201, 76, 0.35);
-            flex-shrink: 0;
         }
 
         .header h1 .title-text {
@@ -371,7 +357,7 @@
     <div class="container">
         <div class="header reveal">
             <div class="eyebrow">Prioritization framework</div>
-            <h1><span class="mark"></span><span class="title-text">ICE Calculator</span></h1>
+            <h1><span class="title-text">ICE Calculator</span></h1>
         </div>
 
         <div class="score-display">
