@@ -7,24 +7,28 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,500;1,600&family=Space+Grotesk:wght@400;500;600;700&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0a0c;
-            --surface: #131316;
-            --surface-raised: #1a1a1e;
-            --border: #262629;
-            --border-soft: #1f1f22;
-            --text-primary: #f2f2f3;
-            --text-secondary: #8c8c93;
-            --text-tertiary: #616166;
+            --bg: #08080a;
+            --bg-glow-a: rgba(242, 201, 76, 0.12);
+            --bg-glow-b: rgba(242, 153, 74, 0.06);
+            --surface: #111113;
+            --surface-raised: #18191c;
+            --surface-raised-2: #1e1f23;
+            --border: #28282d;
+            --border-soft: #1e1e22;
+            --text-primary: #f5f5f6;
+            --text-secondary: #9a9aa1;
+            --text-tertiary: #66666c;
             --accent: #f2c94c;
+            --accent-bright: #ffe38a;
             --accent-soft: rgba(242, 201, 76, 0.18);
-            --impact: #eb5757;
-            --confidence: #f2994a;
-            --ease: #4cb782;
-            --total: #f2c94c;
-            --radius: 10px;
+            --radius: 12px;
+
+            --font-display: 'Fraunces', 'Iowan Old Style', serif;
+            --font-heading: 'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif;
+            --font-body: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
         * {
@@ -34,17 +38,26 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
+            font-family: var(--font-body);
             color: var(--text-primary);
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 48px 20px;
             -webkit-font-smoothing: antialiased;
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(900px 480px at 12% -8%, var(--bg-glow-a), transparent 60%),
+                radial-gradient(800px 460px at 92% 105%, var(--bg-glow-b), transparent 60%);
+            background-attachment: fixed;
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes revealIn {
+            from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            animation: revealIn 0.9s cubic-bezier(.16, 1, .3, 1) both;
         }
 
         @keyframes scorePulse {
@@ -55,53 +68,89 @@
 
         @keyframes cardFlash {
             0% { box-shadow: 0 0 0 0 var(--accent-soft); }
-            35% { box-shadow: 0 0 0 5px var(--accent-soft); }
-            100% { box-shadow: 0 0 0 0 rgba(94, 106, 210, 0); }
+            35% { box-shadow: 0 0 0 6px var(--accent-soft); }
+            100% { box-shadow: 0 0 0 0 rgba(242, 201, 76, 0); }
+        }
+
+        @keyframes totalFlash {
+            0% { box-shadow: 0 0 0 0 var(--tier-soft, var(--accent-soft)); }
+            35% { box-shadow: 0 0 0 8px var(--tier-soft, var(--accent-soft)); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
         }
 
         .container {
+            position: relative;
             max-width: 1200px;
             margin: 0 auto;
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
+            box-shadow:
+                0 40px 100px -30px rgba(0, 0, 0, 0.65),
+                0 1px 0 rgba(255, 255, 255, 0.03) inset;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
+            opacity: 0.5;
         }
 
         .header {
-            padding: 32px 30px;
+            padding: 40px 34px 32px;
             border-bottom: 1px solid var(--border);
-            animation: fadeInUp 0.5s ease both;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 70%);
+        }
+
+        .header .eyebrow {
+            font-family: var(--font-heading);
+            font-size: 0.74rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
         }
 
         .header h1 {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 6px;
+            gap: 14px;
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 600;
+            font-size: 2.6rem;
+            letter-spacing: -0.01em;
+            line-height: 1;
         }
 
         .header h1 .mark {
-            width: 22px;
-            height: 22px;
-            border-radius: 6px;
-            background: linear-gradient(135deg, #ffe08a 0%, var(--accent) 100%);
+            width: 26px;
+            height: 26px;
+            border-radius: 7px;
+            background: linear-gradient(135deg, var(--accent-bright) 0%, var(--accent) 100%);
+            box-shadow: 0 6px 18px rgba(242, 201, 76, 0.35);
             flex-shrink: 0;
         }
 
-        .header p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+        .header h1 .title-text {
+            background: linear-gradient(120deg, var(--accent-bright), var(--accent) 55%, #fff7e0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .score-display {
             display: flex;
             justify-content: space-around;
             gap: 16px;
-            padding: 24px 30px;
+            padding: 28px 34px;
             background: var(--surface);
             border-bottom: 1px solid var(--border);
         }
@@ -109,44 +158,51 @@
         .score-card {
             flex: 1;
             text-align: center;
-            padding: 18px;
-            background: var(--surface-raised);
+            padding: 20px;
+            background: linear-gradient(160deg, var(--surface-raised-2), var(--surface-raised));
             border: 1px solid var(--border-soft);
             border-radius: var(--radius);
             min-width: 120px;
-            transition: border-color 0.2s ease, transform 0.2s ease;
-            animation: fadeInUp 0.5s ease both;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            box-shadow:
+                0 1px 0 rgba(255, 255, 255, 0.05) inset,
+                0 12px 28px -16px rgba(0, 0, 0, 0.65);
         }
 
-        .score-card:nth-child(1) { animation-delay: 0.05s; }
-        .score-card:nth-child(2) { animation-delay: 0.1s; }
-        .score-card:nth-child(3) { animation-delay: 0.15s; }
-        .score-card:nth-child(4) { animation-delay: 0.2s; }
-
         .score-card:hover {
-            border-color: var(--border);
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            border-color: #34343a;
+            box-shadow:
+                0 1px 0 rgba(255, 255, 255, 0.06) inset,
+                0 18px 36px -14px rgba(0, 0, 0, 0.7);
         }
 
         .score-card.flash {
             animation: cardFlash 0.6s ease;
         }
 
+        .score-card.total.flash {
+            animation: totalFlash 0.7s ease;
+        }
+
         .score-card h3 {
-            font-size: 0.75rem;
+            font-family: var(--font-heading);
+            font-size: 0.74rem;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.1em;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: var(--text-secondary);
         }
 
         .score-value {
             display: inline-block;
-            font-size: 2.2rem;
+            font-family: var(--font-heading);
+            font-size: 2.3rem;
             font-weight: 700;
             letter-spacing: -0.02em;
             margin-bottom: 4px;
+            color: var(--text-primary);
         }
 
         .score-value.pulse {
@@ -154,14 +210,38 @@
         }
 
         .score-card .unit {
+            font-family: var(--font-body);
             font-size: 0.8rem;
             color: var(--text-tertiary);
         }
 
-        .impact .score-value { color: var(--impact); }
-        .confidence .score-value { color: var(--confidence); }
-        .ease .score-value { color: var(--ease); }
-        .total .score-value { color: var(--total); }
+        .tier-label {
+            font-family: var(--font-heading);
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+        }
+
+        .total .score-value,
+        .total .tier-label {
+            color: var(--tier-color, var(--accent));
+            transition: color 0.3s ease;
+        }
+
+        .score-card.total {
+            box-shadow:
+                0 0 0 1px var(--tier-color, var(--border-soft)) inset,
+                0 1px 0 rgba(255, 255, 255, 0.05) inset,
+                0 12px 28px -16px rgba(0, 0, 0, 0.65);
+        }
+
+        .total.tier-1 { --tier-color: #eb5757; --tier-soft: rgba(235, 87, 87, 0.2); }
+        .total.tier-2 { --tier-color: #f2994a; --tier-soft: rgba(242, 153, 74, 0.2); }
+        .total.tier-3 { --tier-color: #f2c94c; --tier-soft: rgba(242, 201, 76, 0.2); }
+        .total.tier-4 { --tier-color: #6fcf97; --tier-soft: rgba(111, 207, 151, 0.2); }
+        .total.tier-5 { --tier-color: #2ecc9a; --tier-soft: rgba(46, 204, 154, 0.2); }
 
         .main-content {
             display: grid;
@@ -170,14 +250,9 @@
         }
 
         .section {
-            padding: 28px 30px;
+            padding: 30px 34px;
             border-right: 1px solid var(--border);
-            animation: fadeInUp 0.5s ease both;
         }
-
-        .section:nth-child(1) { animation-delay: 0.15s; }
-        .section:nth-child(2) { animation-delay: 0.25s; }
-        .section:nth-child(3) { animation-delay: 0.35s; }
 
         .section:last-child {
             border-right: none;
@@ -186,30 +261,29 @@
         .section h2 {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 9px;
+            font-family: var(--font-heading);
             font-size: 0.95rem;
             font-weight: 600;
-            margin-bottom: 22px;
-            padding-bottom: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 13px;
             border-bottom: 1px solid var(--border);
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.08em;
+            color: var(--text-primary);
         }
 
         .section h2::before {
             content: '';
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            background: currentColor;
+            background: var(--accent);
+            box-shadow: 0 0 8px rgba(242, 201, 76, 0.6);
         }
 
-        .impact h2 { color: var(--impact); }
-        .confidence h2 { color: var(--confidence); }
-        .ease h2 { color: var(--ease); }
-
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 19px;
         }
 
         .form-group label {
@@ -233,7 +307,7 @@
             border-radius: 8px;
             font-size: 0.9rem;
             font-family: inherit;
-            background: var(--surface-raised);
+            background: linear-gradient(180deg, var(--surface-raised-2), var(--surface-raised));
             color: var(--text-primary);
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
@@ -295,39 +369,40 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1><span class="mark"></span>ICE Calculator</h1>
-            <p>Impact × Confidence × Ease Framework</p>
+        <div class="header reveal">
+            <div class="eyebrow">Prioritization framework</div>
+            <h1><span class="mark"></span><span class="title-text">ICE Calculator</span></h1>
         </div>
 
         <div class="score-display">
-            <div class="score-card impact">
+            <div class="score-card impact reveal">
                 <h3>Impact</h3>
                 <div class="score-value" id="impactScore">0</div>
                 <div class="unit">/ 5</div>
             </div>
-            <div class="score-card confidence">
+            <div class="score-card confidence reveal">
                 <h3>Confidence</h3>
                 <div class="score-value" id="confidenceScore">0</div>
                 <div class="unit">/ 5</div>
             </div>
-            <div class="score-card ease">
+            <div class="score-card ease reveal">
                 <h3>Ease</h3>
                 <div class="score-value" id="easeScore">5</div>
                 <div class="unit">/ 5</div>
             </div>
-            <div class="score-card total">
+            <div class="score-card total reveal">
                 <h3>Total Score</h3>
                 <div class="score-value" id="totalScore">0</div>
+                <div class="tier-label" id="tierLabel">Low priority</div>
             </div>
         </div>
 
         <div class="main-content">
             <!-- Impact Section -->
             <div class="section impact">
-                <h2>Impact</h2>
+                <h2 class="reveal">Impact</h2>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <label><span class="category-label">[New business]</span> Win rate increase potential</label>
                     <select id="winRate" onchange="calculateScores()">
                         <option value="0">Select...</option>
@@ -337,7 +412,7 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <label><span class="category-label">[New business]</span> ARR increase potential</label>
                     <select id="arrPotential" onchange="calculateScores()">
                         <option value="0">Select...</option>
@@ -350,7 +425,7 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <label><span class="category-label">[Existing business]</span> Retention / LTV increase potential</label>
                     <select id="retentionLtv" onchange="calculateScores()">
                         <option value="0">Select...</option>
@@ -360,7 +435,7 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <label><span class="category-label">[Existing business]</span> Customer satisfaction / NPS improvement potential</label>
                     <select id="customerSat" onchange="calculateScores()">
                         <option value="0">Select...</option>
@@ -370,7 +445,7 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <label>User base reach</label>
                     <select id="userBaseReach" onchange="calculateScores()">
                         <option value="0">Select...</option>
@@ -384,9 +459,9 @@
 
             <!-- Confidence Section -->
             <div class="section confidence">
-                <h2>Confidence</h2>
+                <h2 class="reveal">Confidence</h2>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <label>Canny votes</label>
                     <select id="cannyVotes" onchange="calculateScores()">
                         <option value="0">Select...</option>
@@ -398,7 +473,7 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <label>Competitive landscape</label>
                     <select id="competitive" onchange="calculateScores()">
                         <option value="0">Select...</option>
@@ -408,84 +483,84 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="userResearch" onchange="calculateScores()">
                         <label for="userResearch">Confirmed by user research</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="analytics" onchange="calculateScores()">
                         <label for="analytics">Supported by product analytics</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="differentiator" onchange="calculateScores()">
                         <label for="differentiator">Differentiator potential</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="marketTrends" onchange="calculateScores()">
                         <label for="marketTrends">Supported by market trends</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="icpSegment" onchange="calculateScores()">
                         <label for="icpSegment">ICP segment fit</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="icpMarket" onchange="calculateScores()">
                         <label for="icpMarket">ICP market fit</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="churnedDeals" onchange="calculateScores()">
                         <label for="churnedDeals">Supported by churned / lost deals</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="supportWorkload" onchange="calculateScores()">
                         <label for="supportWorkload">Generates Support workload</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="techPerspective" onchange="calculateScores()">
                         <label for="techPerspective">Desirable from the tech perspective</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="selfConviction" onchange="calculateScores()">
                         <label for="selfConviction">Self conviction</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="managerConviction" onchange="calculateScores()">
                         <label for="managerConviction">Your manager's conviction</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="externalFactors" onchange="calculateScores()">
                         <label for="externalFactors">External factors</label>
@@ -495,9 +570,9 @@
 
             <!-- Ease Section -->
             <div class="section ease">
-                <h2>Ease</h2>
+                <h2 class="reveal">Ease</h2>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <label>Implementation complexity</label>
                     <select id="complexity" onchange="calculateScores()">
                         <option value="0">Select...</option>
@@ -508,7 +583,7 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <label>Estimated timeframe</label>
                     <select id="timeframe" onchange="calculateScores()">
                         <option value="0">Select...</option>
@@ -519,56 +594,56 @@
                     </select>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="crossTech" onchange="calculateScores()">
                         <label for="crossTech"><span class="category-label">[Dependencies]</span> Cross-tech team</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="crossModule" onchange="calculateScores()">
                         <label for="crossModule"><span class="category-label">[Dependencies]</span> Cross-module/app/tech</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="crossProject" onchange="calculateScores()">
                         <label for="crossProject"><span class="category-label">[Dependencies]</span> Cross-project</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="integrations" onchange="calculateScores()">
                         <label for="integrations"><span class="category-label">[Dependencies]</span> Integrations</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="internal3rd" onchange="calculateScores()">
                         <label for="internal3rd"><span class="category-label">[Dependencies]</span> Internal 3rd parties involved</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="external3rd" onchange="calculateScores()">
                         <label for="external3rd"><span class="category-label">[Dependencies]</span> External 3rd parties involved</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="legalSecurity" onchange="calculateScores()">
                         <label for="legalSecurity"><span class="category-label">[Dependencies]</span> Legal / security / pricing implications</label>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group reveal">
                     <div class="checkbox-group">
                         <input type="checkbox" id="unknownRisk" onchange="calculateScores()">
                         <label for="unknownRisk">Unknown risk potential</label>
@@ -579,20 +654,37 @@
     </div>
 
     <script>
-        const scoreIds = ['impactScore', 'confidenceScore', 'easeScore', 'totalScore'];
         const previousScores = {};
+
+        const tiers = [
+            { max: 5, n: 1, label: 'Low priority' },
+            { max: 15, n: 2, label: 'Needs work' },
+            { max: 30, n: 3, label: 'Worth exploring' },
+            { max: 55, n: 4, label: 'Strong bet' },
+            { max: Infinity, n: 5, label: 'Must-do' }
+        ];
+
+        function updateTotalTier(total) {
+            const card = document.getElementById('totalScore').closest('.score-card');
+            const tier = tiers.find(t => total < t.max) || tiers[tiers.length - 1];
+            for (let i = 1; i <= 5; i++) card.classList.remove('tier-' + i);
+            card.classList.add('tier-' + tier.n);
+            document.getElementById('tierLabel').textContent = tier.label;
+        }
 
         function animateScoreChange(id, newValue) {
             const el = document.getElementById(id);
+            const card = el.closest('.score-card');
             if (previousScores[id] !== undefined && previousScores[id] !== newValue) {
                 el.classList.remove('pulse');
-                el.closest('.score-card').classList.remove('flash');
+                card.classList.remove('flash');
                 void el.offsetWidth; // restart animation
                 el.classList.add('pulse');
-                el.closest('.score-card').classList.add('flash');
+                card.classList.add('flash');
             }
             previousScores[id] = newValue;
             el.textContent = newValue;
+            if (id === 'totalScore') updateTotalTier(newValue);
         }
 
         function calculateScores() {
@@ -646,6 +738,13 @@
             animateScoreChange('easeScore', ease);
             animateScoreChange('totalScore', total);
         }
+
+        // Stagger the initial reveal animation across every element in document order,
+        // then drop the class so it stops overriding opacity for later animations (pulse/flash)
+        document.querySelectorAll('.reveal').forEach((el, i) => {
+            el.style.animationDelay = `${Math.min(i * 25, 650)}ms`;
+            el.addEventListener('animationend', () => el.classList.remove('reveal'), { once: true });
+        });
 
         // Initialize scores on page load
         calculateScores();
