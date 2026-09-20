@@ -232,7 +232,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label><span class="category-label">[New business]</span> ARR potential</label>
+                    <label><span class="category-label">[New business]</span> ARR increase potential</label>
                     <select id="arrPotential" onchange="calculateScores()">
                         <option value="0">Select...</option>
                         <option value="0.2">&lt;100K</option>
@@ -245,7 +245,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label><span class="category-label">[Existing business]</span> Retention / LTV increase</label>
+                    <label><span class="category-label">[Existing business]</span> Retention / LTV increase potential</label>
                     <select id="retentionLtv" onchange="calculateScores()">
                         <option value="0">Select...</option>
                         <option value="0.1">Low</option>
@@ -255,7 +255,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label><span class="category-label">[Existing business]</span> Customer satisfaction / NPS improvement</label>
+                    <label><span class="category-label">[Existing business]</span> Customer satisfaction / NPS improvement potential</label>
                     <select id="customerSat" onchange="calculateScores()">
                         <option value="0">Select...</option>
                         <option value="0.01">Low</option>
@@ -265,8 +265,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label>User reach</label>
-                    <select id="userReach" onchange="calculateScores()">
+                    <label>User base reach</label>
+                    <select id="userBaseReach" onchange="calculateScores()">
                         <option value="0">Select...</option>
                         <option value="0.2">&lt;10%</option>
                         <option value="0.5">10–25%</option>
@@ -296,9 +296,9 @@
                     <label>Competitive landscape</label>
                     <select id="competitive" onchange="calculateScores()">
                         <option value="0">Select...</option>
-                        <option value="0.5">Playing catch-up, everyone has it</option>
-                        <option value="0.1">Some competitors have it</option>
-                        <option value="0">No competitive alignment</option>
+                        <option value="0.5">Playing catch-up, everyone has it / Low-risk bet</option>
+                        <option value="0.1">Some competitors have it / Medium-risk bet</option>
+                        <option value="0">No competitive alignment / High-risk bet</option>
                     </select>
                 </div>
 
@@ -464,8 +464,8 @@
 
                 <div class="form-group">
                     <div class="checkbox-group">
-                        <input type="checkbox" id="additionalRisk" onchange="calculateScores()">
-                        <label for="additionalRisk">Additional risk potential</label>
+                        <input type="checkbox" id="unknownRisk" onchange="calculateScores()">
+                        <label for="unknownRisk">Unknown risk potential</label>
                     </div>
                 </div>
             </div>
@@ -480,7 +480,7 @@
             impact += parseFloat(document.getElementById('arrPotential').value) || 0;
             impact += parseFloat(document.getElementById('retentionLtv').value) || 0;
             impact += parseFloat(document.getElementById('customerSat').value) || 0;
-            impact += parseFloat(document.getElementById('userReach').value) || 0;
+            impact += parseFloat(document.getElementById('userBaseReach').value) || 0;
             impact = Math.min(Math.round(impact * 10) / 10, 5);
 
             // Confidence calculation (base 0, max 5)
@@ -512,7 +512,7 @@
             ease += document.getElementById('internal3rd').checked ? -1 : 0;
             ease += document.getElementById('external3rd').checked ? -2 : 0;
             ease += document.getElementById('legalSecurity').checked ? -1 : 0;
-            ease += document.getElementById('additionalRisk').checked ? -1 : 0;
+            ease += document.getElementById('unknownRisk').checked ? -1 : 0;
             ease = Math.max(Math.round(ease * 10) / 10, 1);
 
             // Total score (Impact × Confidence × Ease)
