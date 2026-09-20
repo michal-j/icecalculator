@@ -4,7 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ICE Calculator</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #0a0a0c;
+            --surface: #131316;
+            --surface-raised: #1a1a1e;
+            --border: #262629;
+            --border-soft: #1f1f22;
+            --text-primary: #f2f2f3;
+            --text-secondary: #8c8c93;
+            --text-tertiary: #616166;
+            --accent: #f2c94c;
+            --accent-soft: rgba(242, 201, 76, 0.18);
+            --impact: #eb5757;
+            --confidence: #f2994a;
+            --ease: #4cb782;
+            --total: #f2c94c;
+            --radius: 10px;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -12,79 +34,134 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
             min-height: 100vh;
-            padding: 20px;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scorePulse {
+            0% { transform: scale(1); }
+            35% { transform: scale(1.16); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes cardFlash {
+            0% { box-shadow: 0 0 0 0 var(--accent-soft); }
+            35% { box-shadow: 0 0 0 5px var(--accent-soft); }
+            100% { box-shadow: 0 0 0 0 rgba(94, 106, 210, 0); }
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
+            padding: 32px 30px;
+            border-bottom: 1px solid var(--border);
+            animation: fadeInUp 0.5s ease both;
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.6rem;
             font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .header h1 .mark {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #ffe08a 0%, var(--accent) 100%);
+            flex-shrink: 0;
         }
 
         .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
 
         .score-display {
             display: flex;
             justify-content: space-around;
-            padding: 30px;
-            background: #f8f9fa;
-            border-bottom: 3px solid #e9ecef;
+            gap: 16px;
+            padding: 24px 30px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
         }
 
         .score-card {
+            flex: 1;
             text-align: center;
-            padding: 20px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            padding: 18px;
+            background: var(--surface-raised);
+            border: 1px solid var(--border-soft);
+            border-radius: var(--radius);
             min-width: 120px;
-            transition: transform 0.3s ease;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+            animation: fadeInUp 0.5s ease both;
         }
 
+        .score-card:nth-child(1) { animation-delay: 0.05s; }
+        .score-card:nth-child(2) { animation-delay: 0.1s; }
+        .score-card:nth-child(3) { animation-delay: 0.15s; }
+        .score-card:nth-child(4) { animation-delay: 0.2s; }
+
         .score-card:hover {
-            transform: translateY(-5px);
+            border-color: var(--border);
+            transform: translateY(-2px);
+        }
+
+        .score-card.flash {
+            animation: cardFlash 0.6s ease;
         }
 
         .score-card h3 {
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.06em;
+            font-weight: 600;
             margin-bottom: 10px;
-            color: #666;
+            color: var(--text-secondary);
         }
 
         .score-value {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 5px;
+            display: inline-block;
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
         }
 
-        .impact .score-value { color: #e74c3c; }
-        .confidence .score-value { color: #f39c12; }
-        .ease .score-value { color: #27ae60; }
-        .total .score-value { color: #8e44ad; }
+        .score-value.pulse {
+            animation: scorePulse 0.45s ease;
+        }
+
+        .score-card .unit {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+        }
+
+        .impact .score-value { color: var(--impact); }
+        .confidence .score-value { color: var(--confidence); }
+        .ease .score-value { color: var(--ease); }
+        .total .score-value { color: var(--total); }
 
         .main-content {
             display: grid;
@@ -93,59 +170,87 @@
         }
 
         .section {
-            padding: 30px;
-            border-right: 2px solid #f1f2f6;
+            padding: 28px 30px;
+            border-right: 1px solid var(--border);
+            animation: fadeInUp 0.5s ease both;
         }
+
+        .section:nth-child(1) { animation-delay: 0.15s; }
+        .section:nth-child(2) { animation-delay: 0.25s; }
+        .section:nth-child(3) { animation-delay: 0.35s; }
 
         .section:last-child {
             border-right: none;
         }
 
         .section h2 {
-            font-size: 1.5rem;
-            margin-bottom: 25px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 22px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.06em;
         }
 
-        .impact h2 { border-color: #e74c3c; color: #e74c3c; }
-        .confidence h2 { border-color: #f39c12; color: #f39c12; }
-        .ease h2 { border-color: #27ae60; color: #27ae60; }
+        .section h2::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .impact h2 { color: var(--impact); }
+        .confidence h2 { color: var(--confidence); }
+        .ease h2 { color: var(--ease); }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 0.9rem;
+            margin-bottom: 7px;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.87rem;
         }
 
         .category-label {
-            color: #7f8c8d;
-            font-size: 0.8rem;
-            font-weight: normal;
+            color: var(--text-tertiary);
+            font-size: 0.78rem;
+            font-weight: 400;
         }
 
         select {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
             border-radius: 8px;
-            font-size: 0.95rem;
-            background: white;
-            transition: border-color 0.3s ease;
+            font-size: 0.9rem;
+            font-family: inherit;
+            background: var(--surface-raised);
+            color: var(--text-primary);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        select:hover {
+            border-color: #3a3a3f;
         }
 
         select:focus {
             outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+        select option {
+            background: var(--surface-raised);
+            color: var(--text-primary);
         }
 
         .checkbox-group {
@@ -155,33 +260,34 @@
         }
 
         .checkbox-group input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: #3498db;
+            width: 17px;
+            height: 17px;
+            accent-color: var(--accent);
+            cursor: pointer;
         }
 
         .checkbox-group label {
             margin: 0;
             cursor: pointer;
+            font-weight: 400;
         }
 
         @media (max-width: 968px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
-            
+
             .section {
                 border-right: none;
-                border-bottom: 2px solid #f1f2f6;
+                border-bottom: 1px solid var(--border);
             }
-            
+
             .section:last-child {
                 border-bottom: none;
             }
 
             .score-display {
                 flex-wrap: wrap;
-                gap: 15px;
                 justify-content: center;
             }
         }
@@ -190,7 +296,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>ICE Calculator</h1>
+            <h1><span class="mark"></span>ICE Calculator</h1>
             <p>Impact × Confidence × Ease Framework</p>
         </div>
 
@@ -198,17 +304,17 @@
             <div class="score-card impact">
                 <h3>Impact</h3>
                 <div class="score-value" id="impactScore">0</div>
-                <div>/ 5</div>
+                <div class="unit">/ 5</div>
             </div>
             <div class="score-card confidence">
                 <h3>Confidence</h3>
                 <div class="score-value" id="confidenceScore">0</div>
-                <div>/ 5</div>
+                <div class="unit">/ 5</div>
             </div>
             <div class="score-card ease">
                 <h3>Ease</h3>
                 <div class="score-value" id="easeScore">5</div>
-                <div>/ 5</div>
+                <div class="unit">/ 5</div>
             </div>
             <div class="score-card total">
                 <h3>Total Score</h3>
@@ -220,7 +326,7 @@
             <!-- Impact Section -->
             <div class="section impact">
                 <h2>Impact</h2>
-                
+
                 <div class="form-group">
                     <label><span class="category-label">[New business]</span> Win rate increase potential</label>
                     <select id="winRate" onchange="calculateScores()">
@@ -279,7 +385,7 @@
             <!-- Confidence Section -->
             <div class="section confidence">
                 <h2>Confidence</h2>
-                
+
                 <div class="form-group">
                     <label>Canny votes</label>
                     <select id="cannyVotes" onchange="calculateScores()">
@@ -390,7 +496,7 @@
             <!-- Ease Section -->
             <div class="section ease">
                 <h2>Ease</h2>
-                
+
                 <div class="form-group">
                     <label>Implementation complexity</label>
                     <select id="complexity" onchange="calculateScores()">
@@ -473,6 +579,22 @@
     </div>
 
     <script>
+        const scoreIds = ['impactScore', 'confidenceScore', 'easeScore', 'totalScore'];
+        const previousScores = {};
+
+        function animateScoreChange(id, newValue) {
+            const el = document.getElementById(id);
+            if (previousScores[id] !== undefined && previousScores[id] !== newValue) {
+                el.classList.remove('pulse');
+                el.closest('.score-card').classList.remove('flash');
+                void el.offsetWidth; // restart animation
+                el.classList.add('pulse');
+                el.closest('.score-card').classList.add('flash');
+            }
+            previousScores[id] = newValue;
+            el.textContent = newValue;
+        }
+
         function calculateScores() {
             // Impact calculation (base 0, max 5)
             let impact = 0;
@@ -518,11 +640,11 @@
             // Total score (Impact × Confidence × Ease)
             const total = Math.round(impact * confidence * ease * 10) / 10;
 
-            // Update display
-            document.getElementById('impactScore').textContent = impact;
-            document.getElementById('confidenceScore').textContent = confidence;
-            document.getElementById('easeScore').textContent = ease;
-            document.getElementById('totalScore').textContent = total;
+            // Update display, with a pulse animation on any changed score
+            animateScoreChange('impactScore', impact);
+            animateScoreChange('confidenceScore', confidence);
+            animateScoreChange('easeScore', ease);
+            animateScoreChange('totalScore', total);
         }
 
         // Initialize scores on page load
