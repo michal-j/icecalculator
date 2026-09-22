@@ -1,0 +1,8 @@
+{
+  "name": "ice-calculator",
+  "private": true,
+  "description": "A single-page ICE (Impact x Confidence x Ease) scoring tool.",
+  "scripts": {
+    "test": "node --test"
+  }
+}

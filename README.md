@@ -15,9 +15,20 @@ No build step or dependencies — just open [`index.html`](index.html) in a brow
 
 ## Project structure
 
-- `index.html` — the entire app: markup, styles, and scoring logic in one file.
+- `index.html` — markup, styles, and DOM wiring.
+- `scoring.js` — the scoring math (pure functions, no DOM), shared by the app and the test suite.
 - `favicon.svg` — the browser tab icon.
+- `docs/architecture.md` — scoring weights, tier thresholds, known gotchas, and design decisions.
+- `tests/` — automated tests plus a human-readable test-case walkthrough.
 
 ## Development
 
-Plain HTML/CSS/vanilla JS, no framework or tooling required. Edit `index.html` directly and reload the page to see changes.
+Plain HTML/CSS/vanilla JS, no framework or build step required. Edit `index.html` or `scoring.js` directly and reload the page to see changes.
+
+## Testing
+
+```
+npm test
+```
+
+Runs the scoring logic tests with Node's built-in test runner (`node --test`) — no install step. See [`tests/TEST_CASES.md`](tests/TEST_CASES.md) for the same coverage as a manual walkthrough, and [`docs/architecture.md`](docs/architecture.md) for the reasoning behind the scoring weights and a few documented quirks.

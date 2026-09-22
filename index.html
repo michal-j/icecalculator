@@ -639,20 +639,13 @@
         </div>
     </div>
 
+    <script src="scoring.js"></script>
     <script>
         const previousScores = {};
 
-        const tiers = [
-            { max: 5, n: 1, label: 'Low priority' },
-            { max: 15, n: 2, label: 'Needs work' },
-            { max: 30, n: 3, label: 'Worth exploring' },
-            { max: 55, n: 4, label: 'Strong bet' },
-            { max: Infinity, n: 5, label: 'Must-do' }
-        ];
-
         function updateTotalTier(total) {
             const card = document.getElementById('totalScore').closest('.score-card');
-            const tier = tiers.find(t => total < t.max) || tiers[tiers.length - 1];
+            const tier = ICEScoring.getTier(total);
             for (let i = 1; i <= 5; i++) card.classList.remove('tier-' + i);
             card.classList.add('tier-' + tier.n);
             document.getElementById('tierLabel').textContent = tier.label;
@@ -673,50 +666,26 @@
             if (id === 'totalScore') updateTotalTier(newValue);
         }
 
+        function readInputs() {
+            const fieldIds = [
+                'winRate', 'arrPotential', 'retentionLtv', 'customerSat', 'userBaseReach',
+                'cannyVotes', 'competitive', 'complexity', 'timeframe'
+            ];
+            const checkboxIds = [
+                'userResearch', 'analytics', 'differentiator', 'marketTrends', 'icpSegment',
+                'icpMarket', 'churnedDeals', 'supportWorkload', 'techPerspective',
+                'selfConviction', 'managerConviction', 'externalFactors',
+                'crossTech', 'crossModule', 'crossProject', 'integrations',
+                'internal3rd', 'external3rd', 'legalSecurity', 'unknownRisk'
+            ];
+            const inputs = {};
+            fieldIds.forEach(id => { inputs[id] = document.getElementById(id).value; });
+            checkboxIds.forEach(id => { inputs[id] = document.getElementById(id).checked; });
+            return inputs;
+        }
+
         function calculateScores() {
-            // Impact calculation (base 0, max 5)
-            let impact = 0;
-            impact += parseFloat(document.getElementById('winRate').value) || 0;
-            impact += parseFloat(document.getElementById('arrPotential').value) || 0;
-            impact += parseFloat(document.getElementById('retentionLtv').value) || 0;
-            impact += parseFloat(document.getElementById('customerSat').value) || 0;
-            impact += parseFloat(document.getElementById('userBaseReach').value) || 0;
-            impact = Math.min(Math.round(impact * 10) / 10, 5);
-
-            // Confidence calculation (base 0, max 5)
-            let confidence = 0;
-            confidence += parseFloat(document.getElementById('cannyVotes').value) || 0;
-            confidence += parseFloat(document.getElementById('competitive').value) || 0;
-            confidence += document.getElementById('userResearch').checked ? 1 : 0;
-            confidence += document.getElementById('analytics').checked ? 0.5 : 0;
-            confidence += document.getElementById('differentiator').checked ? 0.5 : 0;
-            confidence += document.getElementById('marketTrends').checked ? 0.1 : 0;
-            confidence += document.getElementById('icpSegment').checked ? 0.1 : 0;
-            confidence += document.getElementById('icpMarket').checked ? 0.25 : 0;
-            confidence += document.getElementById('churnedDeals').checked ? 0.75 : 0;
-            confidence += document.getElementById('supportWorkload').checked ? 0.5 : 0;
-            confidence += document.getElementById('techPerspective').checked ? 1 : 0;
-            confidence += document.getElementById('selfConviction').checked ? 0.01 : 0;
-            confidence += document.getElementById('managerConviction').checked ? 0.02 : 0;
-            confidence += document.getElementById('externalFactors').checked ? 0.5 : 0;
-            confidence = Math.min(Math.round(confidence * 10) / 10, 5);
-
-            // Ease calculation (base 5, min 1)
-            let ease = 5;
-            ease += parseFloat(document.getElementById('complexity').value) || 0;
-            ease += parseFloat(document.getElementById('timeframe').value) || 0;
-            ease += document.getElementById('crossTech').checked ? -1 : 0;
-            ease += document.getElementById('crossModule').checked ? -2 : 0;
-            ease += document.getElementById('crossProject').checked ? -1 : 0;
-            ease += document.getElementById('integrations').checked ? -2 : 0;
-            ease += document.getElementById('internal3rd').checked ? -1 : 0;
-            ease += document.getElementById('external3rd').checked ? -2 : 0;
-            ease += document.getElementById('legalSecurity').checked ? -1 : 0;
-            ease += document.getElementById('unknownRisk').checked ? -1 : 0;
-            ease = Math.max(Math.round(ease * 10) / 10, 1);
-
-            // Total score (Impact × Confidence × Ease)
-            const total = Math.round(impact * confidence * ease * 10) / 10;
+            const { impact, confidence, ease, total } = ICEScoring.calculateAll(readInputs());
 
             // Update display, with a pulse animation on any changed score
             animateScoreChange('impactScore', impact);
